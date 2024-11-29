@@ -1,0 +1,46 @@
+Estrategia General
+	La estrategia implementada en el código tiene como objetivo identificar a la mejor jugadora (aquella con probabilidad de enceste = 0.50) utilizando un proceso iterativo que combina la reducción progresiva de participantes con la optimización de recursos (tiros libres promedio). 
+	Este enfoque busca minimizar la cantidad de tiros libres necesarios mientras se mantiene una probabilidad de éxito superior al 99%.
+
+Pasos principales de la estrategia
+
+1. Configuración inicial:
+	Semilla: Se fija una semilla (100019) para asegurar reproducibilidad y consistencia en los resultados.
+	Jugadoras y probabilidades:
+		Hay 100 jugadoras, donde:
+		La mejor tiene una probabilidad fija de enceste de 0.50.
+		Las demás tienen probabilidades distribuidas uniformemente entre 0.204 y 0.40.
+	Simulaciones: Se ejecutan 100,000 simulaciones para validar la efectividad de la estrategia.
+
+
+2. Simulación de tiros libres:
+	Se utiliza una distribución binomial para modelar los resultados de los tiros libres realizados por cada jugadora, dado un número de intentos (n_tiros) y una probabilidad específica de éxito (p_jugadoras).
+
+
+3. Estrategia optimizada:
+	Se implementa un proceso iterativo para seleccionar a la mejor jugadora en varias rondas. Los pasos son:
+a) Priors iniciales:
+	Cada jugadora comienza con una distribución Beta inicial (α = 1, β = 1), representando una estimación uniforme de su probabilidad de éxito.
+
+b) Rondas eliminatorias:
+Primera ronda:
+	Se asignan tiros iniciales a todas las jugadoras.
+	Se calculan las medias posteriores de las probabilidades de enceste para cada jugadora (usando la distribución Beta).
+	Solo el 25% de las jugadoras con mejor rendimiento continúa a la siguiente ronda.
+Rondas intermedias:
+	Se retiene el 50% de las jugadoras con mejor desempeño en cada ronda.
+	El número de tiros asignados a cada jugadora aumenta progresivamente (+50 por ronda).
+Última ronda:
+	Se identifica directamente a la mejor jugadora entre las restantes como aquella con la mayor media posterior.
+
+c) Actualización dinámica:
+En cada ronda, los parámetros de la distribución Beta (alphas y betas) se actualizan con base en los tiros realizados (encestes y fallos), ajustando así las estimaciones de las probabilidades de enceste.
+
+
+
+4. Validación y evaluación:
+Se ejecutan 100,000 simulaciones para medir:
+	Probabilidad de éxito: La proporción de simulaciones en las que se identifica correctamente a la mejor jugadora.
+	Tiros libres promedio: El número medio de tiros realizados en todas las rondas.
+	Tiempo de ejecución: El tiempo total necesario para ejecutar todas las simulaciones.
+
